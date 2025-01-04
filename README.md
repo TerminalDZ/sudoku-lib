@@ -28,9 +28,9 @@ pip install sudoku-lib
 Or install from source:
 
 ```bash
-git clone https://github.com/IdrissBoukmouche/sudoku-lib
+git clone https://github.com/terminaldz/sudoku-lib
 cd sudoku-lib
-pip install -e .
+pip install -r requirements.txt
 ```
 
 ## Library Usage
@@ -105,7 +105,86 @@ sys.exit(app.exec())
 
 A comprehensive Python library and application for Sudoku puzzle generation, solving, and gameplay. This project combines traditional Sudoku gameplay with advanced solving algorithms, providing both a powerful library and a sleek, user-friendly interface.
 
-### Features
+## Workflow
+
+### CI/CD Pipelines
+
+The project uses GitHub Actions for continuous integration and deployment:
+
+#### Continuous Integration (`ci.yml`)
+- Runs on every push and pull request to main branch
+- Tests against Python 3.8, 3.9, 3.10, and 3.11
+- Performs:
+  - Code linting with flake8
+  - Type checking with mypy
+  - Unit tests with pytest
+  - Code coverage reporting to Codecov
+
+#### Security Scanning (`codeql.yml`)
+- CodeQL analysis for security vulnerabilities
+- Runs on push, pull requests, and weekly schedule
+- Analyzes Python codebase for security issues
+
+#### Publication (`publish.yml`)
+- Triggered on release publication
+- Builds and publishes package to PyPI
+- Requires PyPI API token in repository secrets
+
+### Development Workflow
+1. **Setup Development Environment**
+   ```bash
+   # Clone the repository
+   git clone https://github.com/terminaldz/sudoku-lib
+   cd sudoku-lib
+   
+   # Create and activate virtual environment
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   
+   # Install development dependencies
+   pip install -e ".[dev]"
+   ```
+
+2. **Making Changes**
+   - Create a new branch for your feature/fix
+   - Write tests for new functionality
+   - Ensure all tests pass locally
+   - Update documentation as needed
+
+3. **Code Quality**
+   ```bash
+   # Run linting
+   flake8 sudoku_lib tests
+   
+   # Run type checking
+   mypy sudoku_lib
+   
+   # Run tests with coverage
+   pytest --cov=sudoku_lib tests/
+   ```
+
+4. **Submitting Changes**
+   - Push changes to your fork
+   - Create a pull request with a clear description
+   - Ensure CI checks pass
+   - Request review from maintainers
+
+### Release Workflow
+1. **Version Update**
+   - Update version in `setup.py`
+   - Update CHANGELOG.md
+   - Create release notes
+
+2. **Package Release**
+   ```bash
+   # Build distribution
+   python -m build
+   
+   # Upload to PyPI
+   python -m twine upload dist/*
+   ```
+
+## Features
 
 #### Core Library Features
 - 🧩 Puzzle generation with multiple difficulty levels
