@@ -9,31 +9,62 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --border-radius: 1rem;
+  --max-width: 1200px;
+  --header-height: 70px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+  min-height: 100vh;
 }
 
 .app {
-  text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--text-primary);
 }
 
 header {
-  padding: 2.5rem 1.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  padding: 1rem 2rem;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(16px);
   box-shadow: var(--shadow-md);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-content {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 h1 {
   margin: 0;
-  color: var(--primary-color);
-  font-size: 2.75rem;
+  font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: -0.025em;
   background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
@@ -42,27 +73,39 @@ h1 {
 }
 
 .subtitle {
-  margin: 0.75rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--text-secondary);
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.5;
 }
 
 main {
+  margin-top: var(--header-height);
   flex: 1;
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  gap: 2rem;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
 }
 
+.game-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .message {
-  margin-top: 1.5rem;
+  margin: 1rem auto;
   padding: 1rem 1.5rem;
   border-radius: var(--border-radius);
   background: white;
@@ -70,6 +113,8 @@ main {
   animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 600px;
+  width: 100%;
 }
 
 .message.success {
@@ -118,28 +163,55 @@ button:disabled {
 }
 
 @keyframes slideIn {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(-10px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
   }
-  to {
-    opacity: 1;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  main {
+    padding: 1rem 0.5rem;
+  }
+
+  .game-container {
+    padding: 0 0.5rem;
+  }
+
+  .message {
+    margin: 0.5rem auto;
+    padding: 0.75rem 1rem;
   }
 }
 
-/* Add smooth transitions for all interactive elements */
-* {
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+@media (max-width: 480px) {
+  header {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .game-container {
+    gap: 1rem;
+  }
 }
 
 footer {
@@ -174,16 +246,7 @@ footer {
   }
 }
 
-@media (max-width: 600px) {
-  h1 {
-    font-size: 2em;
-  }
-  
-  .subtitle {
-    font-size: 1em;
-  }
-  
-  main {
-    padding: 10px;
-  }
+/* Add smooth transitions for all interactive elements */
+* {
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }

@@ -86,7 +86,7 @@ function App() {
       const response = await fetch(`${API_URL}/solve`, {
         ...fetchOptions,
         method: 'POST',
-        body: JSON.stringify({ grid: puzzle })
+        body: JSON.stringify({ puzzle: puzzle })
       });
       
       if (!response.ok) {
@@ -95,6 +95,8 @@ function App() {
       }
       
       const data = await response.json();
+      //console data 
+      
       if (data.solution) {
         setPuzzle(data.solution);
         setSolutionSteps(data.steps || []);
@@ -119,7 +121,7 @@ function App() {
       const response = await fetch(`${API_URL}/hint`, {
         ...fetchOptions,
         method: 'POST',
-        body: JSON.stringify({ grid: puzzle })
+        body: JSON.stringify({ puzzle: puzzle })
       });
       
       if (!response.ok) {
@@ -128,8 +130,8 @@ function App() {
       }
       
       const data = await response.json();
-      if (data.row !== undefined && data.column !== undefined && data.value !== undefined) {
-        setHintCell({ row: data.row, column: data.column });
+      if (data.row !== undefined && data.col !== undefined && data.value !== undefined) {
+        setHintCell({ row: data.row, column: data.col });
         setMessage(`💡 ${data.message}`);
       } else {
         setMessage('No hint available for the current state.');
@@ -148,7 +150,7 @@ function App() {
       const response = await fetch(`${API_URL}/validate`, {
         ...fetchOptions,
         method: 'POST',
-        body: JSON.stringify({ grid: puzzle })
+        body: JSON.stringify({ puzzle })
       });
       
       if (!response.ok) {
@@ -156,10 +158,10 @@ function App() {
         throw new Error(errorData.detail || 'Failed to validate solution');
       }
       
-      const data = await response.json();
-      setMessage(data.valid 
-        ? `✅ ${data.reason}` 
-        : `❌ ${data.reason}`
+      const { is_valid = false, errors = [] } = await response.json() || {};
+      setMessage(is_valid 
+        ? '✅ The solution is valid!' 
+        : `❌ ${errors.join(', ') || 'Invalid solution'}`
       );
     } catch (error) {
       setMessage(error.message || 'Error validating solution. Please try again.');

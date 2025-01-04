@@ -12,7 +12,7 @@ from .game import SudokuGame
 from .solver import SudokuSolver
 
 app = FastAPI(
-    title="Sudoku IBA API",
+    title="Sudoku API",
     description="""
     A professional Sudoku API with puzzle generation, solving, and hint capabilities.
     
@@ -53,6 +53,7 @@ app = FastAPI(
     ]
 )
 
+# CORS middleware configuration
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
@@ -67,16 +68,9 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-@app.options("/{path:path}")
-async def options_handler(request: Request):
-    return JSONResponse(
-        status_code=200,
-        content={"detail": "OK"}
-    )
-
 class SudokuGrid(BaseModel):
-    """A 9x9 Sudoku grid"""
-    grid: List[List[int]] = Field(
+    """Pydantic model for Sudoku grid"""
+    puzzle: List[List[int]] = Field(
         ...,
         description="9x9 grid where 0 represents empty cells",
         example=[
@@ -119,7 +113,6 @@ async def root():
     }
 
 @app.get("/puzzle/{difficulty}",
-    response_model=Dict[str, List[List[int]]],
     tags=["puzzles"],
     summary="Generate New Puzzle",
     description="""
@@ -131,45 +124,57 @@ async def root():
     * hard: 50 empty cells
     """
 )
-async def get_puzzle(
-    difficulty: str = Path(
-        ...,
-        title="Difficulty Level",
-        description="The difficulty level of the puzzle (easy, medium, or hard)",
-        regex="^(easy|medium|hard)$"
-    )
-):
+async def get_puzzle(difficulty: str):
     """Generate a new Sudoku puzzle with the specified difficulty level."""
+    if difficulty not in ["easy", "medium", "hard"]:
+        raise HTTPException(status_code=400, detail="Invalid difficulty level")
+        
     try:
         sudoku = SudokuGame()
         puzzle = sudoku.new_game(difficulty)
-        return {"puzzle": grid_to_list(puzzle)}
+        return {
+            "puzzle": grid_to_list(puzzle),
+            "difficulty": difficulty
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/solve", tags=["solver"])
+@app.post("/solve",
+    tags=["solver"],
+    summary="Solve Puzzle",
+    description="Solve a Sudoku puzzle and return the solution with steps"
+)
 async def solve_puzzle(grid: SudokuGrid):
     """Solve a Sudoku puzzle."""
     try:
-        solver = SudokuSolver(np.array(grid.grid))
+        solver = SudokuSolver(np.array(grid.puzzle))
         success, steps = solver.solve()
         if success:
-            return {"solution": solver.grid.tolist(), "steps": steps}
+            solution = solver.grid.tolist()
+            return {
+                "solution": solution,
+                "steps": steps,
+                "is_valid": True
+            }
         raise HTTPException(status_code=400, detail="No solution exists")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/hint", tags=["solver"])
+@app.post("/hint",
+    tags=["solver"],
+    summary="Get Hint",
+    description="Get a hint for the next move in the puzzle"
+)
 async def get_hint(grid: SudokuGrid):
     """Get a hint for the next move in a Sudoku puzzle."""
     try:
-        solver = SudokuSolver(np.array(grid.grid))
+        solver = SudokuSolver(np.array(grid.puzzle))
         hint = solver.get_hint()
         if hint:
             row, col, value, message = hint
             return {
                 "row": int(row),
-                "column": int(col),
+                "col": int(col),
                 "value": int(value),
                 "message": message
             }
@@ -177,34 +182,43 @@ async def get_hint(grid: SudokuGrid):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/validate", tags=["validation"])
+@app.post("/validate",
+    tags=["validation"],
+    summary="Validate Solution",
+    description="Validate a completed Sudoku puzzle solution"
+)
 async def validate_solution(grid: SudokuGrid):
     """Validate a Sudoku puzzle solution."""
     try:
         # Convert grid to numpy array
-        grid_array = np.array(grid.grid)
+        grid_array = np.array(grid.puzzle)
+        errors = []
         
         # Check if grid is complete (no zeros)
         if 0 in grid_array:
-            return {"valid": False, "reason": "Grid is incomplete"}
+            errors.append("Grid is incomplete")
+            return {"is_valid": False, "errors": errors}
             
         # Check rows
-        for row in grid_array:
+        for i, row in enumerate(grid_array):
             if len(set(row)) != 9:
-                return {"valid": False, "reason": "Invalid row"}
+                errors.append(f"Invalid row {i+1}")
                 
         # Check columns
-        for col in grid_array.T:
+        for i, col in enumerate(grid_array.T):
             if len(set(col)) != 9:
-                return {"valid": False, "reason": "Invalid column"}
+                errors.append(f"Invalid column {i+1}")
                 
         # Check 3x3 boxes
         for i in range(0, 9, 3):
             for j in range(0, 9, 3):
                 box = grid_array[i:i+3, j:j+3].flatten()
                 if len(set(box)) != 9:
-                    return {"valid": False, "reason": "Invalid 3x3 box"}
-                    
-        return {"valid": True, "reason": "Solution is valid"}
+                    errors.append(f"Invalid 3x3 box at position ({i//3+1}, {j//3+1})")
+        
+        return {
+            "is_valid": len(errors) == 0,
+            "errors": errors
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

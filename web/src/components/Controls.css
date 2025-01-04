@@ -2,15 +2,18 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  width: 100%;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(16px);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 800px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.controls:hover {
+  box-shadow: var(--shadow-lg);
 }
 
 .difficulty-controls,
@@ -19,6 +22,7 @@
   gap: 1rem;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .difficulty-controls {
@@ -37,6 +41,12 @@ select {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
   min-width: 150px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
 }
 
 select:hover {
@@ -50,6 +60,27 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
 .new-game-btn {
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: white;
@@ -57,6 +88,7 @@ select:focus {
 
 .new-game-btn:hover {
   background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  transform: translateY(-1px);
 }
 
 .solve-btn {
@@ -66,6 +98,7 @@ select:focus {
 
 .solve-btn:hover {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
 }
 
 .hint-btn {
@@ -75,6 +108,7 @@ select:focus {
 
 .hint-btn:hover {
   background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  transform: translateY(-1px);
 }
 
 .validate-btn {
@@ -84,17 +118,17 @@ select:focus {
 
 .validate-btn:hover {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-1px);
 }
 
 .steps-btn {
   background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
   color: white;
-  position: relative;
-  overflow: hidden;
 }
 
 .steps-btn:hover {
   background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  transform: translateY(-1px);
 }
 
 .steps-btn::after {
@@ -113,46 +147,68 @@ select:focus {
   animation: shine 3s infinite;
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  background: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .controls {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .difficulty-controls,
+  .game-controls {
+    gap: 0.75rem;
+  }
+
+  select {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    min-width: 130px;
+  }
+
+  button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    padding: 0.75rem;
+  }
+
+  .difficulty-controls {
+    padding-bottom: 1rem;
+  }
+
+  select,
+  button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .game-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  button {
+    padding: 0.75rem 1rem;
+  }
+}
+
 @keyframes shine {
   0% {
     transform: translateX(-100%) rotate(45deg);
   }
   100% {
     transform: translateX(100%) rotate(45deg);
-  }
-}
-
-button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-@media (max-width: 600px) {
-  .controls {
-    padding: 1rem;
-  }
-
-  .difficulty-controls,
-  .game-controls {
-    flex-direction: column;
-  }
-
-  button,
-  select {
-    width: 100%;
   }
 }
 

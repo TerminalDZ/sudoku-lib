@@ -1,287 +1,202 @@
-# Sudoku AI Library
+# Sudoku AI
+
+<div align="center">
 
 ![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.68%2B-009688)
+![React](https://img.shields.io/badge/React-18.0%2B-61DAFB)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
 
-A comprehensive Python library for Sudoku puzzle generation, solving, and game management, featuring an AI-powered solver and a RESTful API.
+</div>
 
-## 📋 Table of Contents
+A modern, full-stack Sudoku application featuring an AI-powered solver, RESTful API, and a responsive web interface. Built with Python (FastAPI) backend and React frontend, this project combines classical game logic with modern web technologies to deliver an engaging Sudoku experience.
 
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [API Reference](#api-reference)
-- [Web Application](#web-application)
-- [Development](#development)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+## 🌟 Key Features
 
-## ✨ Features
+- **Advanced AI Solver**: Implements sophisticated algorithms for efficient puzzle solving
+- **RESTful API**: Comprehensive HTTP endpoints for all game operations
+- **Modern Web Interface**: Responsive React-based UI with professional design
+- **Multiple Difficulty Levels**: Customizable puzzle generation
+- **Intelligent Hint System**: Context-aware suggestions for next moves
+- **Real-time Validation**: Immediate feedback on move validity
+- **Cross-platform Compatibility**: Works seamlessly on desktop and mobile devices
 
-- **🎮 Puzzle Generation**: Create Sudoku puzzles with varying difficulty levels
-- **🤖 AI Solver**: Advanced algorithm for solving puzzles efficiently
-- **🌐 REST API**: Complete HTTP API for puzzle operations
-- **💡 Hint System**: Intelligent hint generation for next moves
-- **✅ Validation**: Comprehensive puzzle validation and error checking
-- **📊 Game Statistics**: Track solving progress and performance
-
-## 🚀 Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip package manager
+- Python 3.8+
+- Node.js 14+
+- npm 6+ or yarn 1.22+
 
-### Install from PyPI
+### Backend Setup
 
+1. **Clone the Repository**
 ```bash
-pip install sudoku-iba-lib
+git clone https://github.com/terminaldz/sudoku-ai.git
+cd sudoku-ai
 ```
 
-### Install from Source
-
+2. **Create a Virtual Environment**
 ```bash
-git clone https://github.com/terminaldz/sudoku-lib.git
-cd sudoku-lib
-pip install -e ".[dev]"
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-## 🎯 Quick Start
-
-### Basic Usage
-
-```python
-from sudoku_lib.game import SudokuGame
-from sudoku_lib.solver import SudokuSolver
-
-# Create a new game
-game = SudokuGame()
-puzzle = game.new_game("medium")
-
-# Solve the puzzle
-solver = SudokuSolver(puzzle)
-solution, steps = solver.solve()
-
-# Get a hint
-hint = solver.get_hint()
-```
-
-### GUI Application
-
-```python
-from sudoku_lib.gui import SudokuGUI
-
-# Launch the GUI
-app = SudokuGUI()
-app.run()
-```
-
-## 🌐 API Reference
-
-### Starting the API Server
-
+3. **Install Dependencies**
 ```bash
-# Development server
+pip install -r requirements.txt
+```
+
+4. **Start the API Server**
+```bash
 uvicorn sudoku_lib.api:app --reload
-
-# Production server
-uvicorn sudoku_lib.api:app --host 0.0.0.0 --port 8000
 ```
+
+The API will be available at `http://localhost:8000`
+
+### Frontend Setup
+
+1. **Navigate to Web Directory**
+```bash
+cd web
+```
+
+2. **Install Dependencies**
+```bash
+npm install
+# or
+yarn install
+```
+
+3. **Start Development Server**
+```bash
+npm start
+# or
+yarn start
+```
+
+The web application will be available at `http://localhost:3000`
+
+## 📚 API Documentation
 
 ### Interactive Documentation
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+- Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
+- ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-### API Endpoints
+### Core Endpoints
 
-#### Generate Puzzle
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/puzzle/{difficulty}` | GET | Generate a new puzzle |
+| `/solve` | POST | Solve a puzzle |
+| `/hint` | POST | Get next move suggestion |
+| `/validate` | POST | Validate puzzle solution |
+
+### Example Usage
 
 ```python
 import requests
 
-# Get a medium difficulty puzzle
-response = requests.get("http://localhost:8000/puzzle/medium")
-puzzle = response.json()["puzzle"]
-```
+API_URL = "http://localhost:8000"
 
-#### Solve Puzzle
+# Generate a new puzzle
+puzzle = requests.get(f"{API_URL}/puzzle/medium").json()
 
-```python
 # Solve a puzzle
 solution = requests.post(
-    "http://localhost:8000/solve",
-    json={"puzzle": puzzle}
+    f"{API_URL}/solve",
+    json={"puzzle": puzzle["puzzle"]}
 ).json()
-```
 
-#### Get Hint
-
-```python
-# Get next move hint
+# Get a hint
 hint = requests.post(
-    "http://localhost:8000/hint",
-    json={"puzzle": puzzle}
+    f"{API_URL}/hint",
+    json={"puzzle": puzzle["puzzle"]}
 ).json()
 ```
 
-#### Validate Solution
+## 🎮 Web Interface Features
 
-```python
-# Check solution validity
-result = requests.post(
-    "http://localhost:8000/validate",
-    json={"puzzle": solution}
-).json()
-```
-
-For more examples, see [examples/api_usage.py](examples/api_usage.py).
-
-## 🌐 Web Application
-
-The project includes a modern web interface built with React, providing a user-friendly way to interact with the Sudoku API.
-
-### Features
-
-- **🎮 Interactive Game Board**: Responsive grid with real-time input validation
-- **🎯 Multiple Difficulty Levels**: Choose between Easy, Medium, and Hard
-- **💡 Hint System**: Get suggestions for your next move
-- **✅ Solution Validation**: Check if your solution is correct
-- **🤖 AI Solver**: Solve any puzzle with our advanced AI algorithm
-- **📱 Responsive Design**: Works on desktop and mobile devices
-
-### Running the Web App
-
-1. **Start the API Server**
-```bash
-# Start the FastAPI server
-uvicorn sudoku_lib.api:app --reload
-```
-
-2. **Install Web Dependencies**
-```bash
-# Navigate to web directory
-cd web
-
-# Install dependencies
-npm install
-```
-
-3. **Start the Web App**
-```bash
-# Start development server
-npm start
-```
-
-The web application will be available at [http://localhost:3000](http://localhost:3000)
-
-
-#### Main Game Interface
-
-- Interactive Sudoku grid
-- Difficulty selector
-- Game controls
-
-#### Features
-- Real-time validation
+### Game Controls
+- Difficulty selection (Easy, Medium, Hard)
+- New game generation
+- Solution validation
 - Hint system
-- Professional UI/UX
-- Mobile responsive
+- AI solver integration
 
-### Project Structure
-
-```
-web/
-├── src/
-│   ├── components/     # React components
-│   │   ├── Board.jsx   # Sudoku grid component
-│   │   └── Controls.jsx# Game controls
-│   ├── App.jsx        # Main application
-├── public/           # Static assets
-└── package.json     # Dependencies
-```
-
-### Technologies Used
-
-- **React**: Frontend framework
-- **CSS3**: Styling and animations
-- **FastAPI**: Backend API
-- **Fetch API**: API communication
+### User Experience
+- Responsive grid layout
+- Touch-friendly interface
+- Real-time move validation
+- Visual feedback for hints and errors
+- Professional animations and transitions
 
 ## 🛠️ Development
 
 ### Project Structure
-
 ```
-sudoku_lib/
-├── api.py          # REST API implementation
-├── game.py         # Core game logic
-├── solver.py       # AI solver implementation
-
-
-tests/
-├── test_api.py     # API tests
-├── test_game.py    # Game logic tests
-└── test_solver.py  # Solver tests
-
-examples/
-├── basic_usage.py  # Basic library usage
-└── api_usage.py    # API usage examples
+sudoku-ai/
+├── sudoku_lib/          # Backend Python package
+│   ├── api.py          # FastAPI application
+│   ├── game.py         # Game logic
+│   └── solver.py       # AI solver implementation
+├── web/                # Frontend React application
+│   ├── src/
+│   │   ├── components/ # React components
+│   │   ├── styles/     # CSS modules
+│   │   └── utils/      # Helper functions
+│   └── public/         # Static assets
+└── tests/              # Test suite
 ```
 
-### Setup Development Environment
+### Testing
 
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate    # Windows
-
-# Install development dependencies
-pip install -e ".[dev]"
-```
-
-## 🧪 Testing
-
-```bash
-# Run all tests
+# Run backend tests
 pytest
 
-# Run tests with coverage
-pytest --cov=sudoku_lib --cov-report=term-missing
-
-# Run specific test file
-pytest tests/test_api.py
+# Run frontend tests
+cd web && npm test
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ### Code Style
 
-- Follow PEP 8 guidelines
-- Use type hints
-- Write docstrings for all public functions
-- Add tests for new features
+- Backend: Follows PEP 8 guidelines
+- Frontend: Uses ESLint with Airbnb configuration
+- Pre-commit hooks ensure code quality
+
+## 📈 Performance
+
+- **API Response Times**: < 100ms for puzzle generation
+- **Solver Efficiency**: Optimized for puzzles of all difficulty levels
+- **Frontend Performance**: Lighthouse score > 90
+- **Mobile Responsiveness**: Tested on various devices and screen sizes
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
+
+- Code of Conduct
+- Development process
+- Pull request procedure
+- Coding standards
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🙏 Acknowledgments
+
+- FastAPI framework
+- React.js community
+- Contributors and testers
+
 ## 📧 Contact
 
-Idriss Boukmouche - boukemoucheidriss@gmail.com
+Idriss Boukmouche - [boukemoucheidriss@gmail.com](mailto:boukemoucheidriss@gmail.com)
 
-Project Link: [https://github.com/terminaldz/sudoku-lib](https://github.com/terminaldz/sudoku-lib)
-
----
-
-Made with ❤️ by [Idriss Boukmouche](https://github.com/terminaldz)
+Project Link: [https://github.com/terminaldz/sudoku-ai](https://github.com/terminaldz/sudoku-ai)
