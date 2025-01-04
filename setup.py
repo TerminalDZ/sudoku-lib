@@ -6,7 +6,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         "numpy>=1.19.0",
-        "PySide6>=6.0.0"
+        "PySide6>=6.0.0",
+        "fastapi>=0.100.0",
+        "uvicorn>=0.23.0",
+        "pydantic>=2.0.0"
     ],
     extras_require={
         "dev": [
@@ -15,6 +18,9 @@ setup(
             "flake8>=6.0.0",
             "mypy>=1.0.0",
             "black>=23.0.0",
+            "requests>=2.31.0",
+            "httpx>=0.24.0",
+            "pytest-asyncio>=0.21.0"
         ]
     },
     author="Idriss Boukmouche",

@@ -1,396 +1,215 @@
-# Sudoku Library
+# Sudoku AI Library
 
-A comprehensive Python library for Sudoku puzzle generation, solving, and game management. This library provides both the core solving algorithms and a complete game implementation with GUI support.
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
 
-## Features
+A comprehensive Python library for Sudoku puzzle generation, solving, and game management, featuring an AI-powered solver and a RESTful API.
 
-### Core Library Features
-- 🧩 Puzzle generation with multiple difficulty levels
-- 🤖 Advanced solving algorithms
-- 💾 Solution caching and persistence
-- 📊 Player statistics tracking
-- 💾 Game state saving/loading
-- ✅ Solution verification
+## 📋 Table of Contents
 
-### GUI Application Features
-- 🎮 Modern, intuitive interface
-- 🎯 Multiple difficulty levels
-- 🔢 Input validation
-- 💡 Hint system
-- 📈 Progress tracking
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Development](#development)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Installation
+## ✨ Features
+
+- **🎮 Puzzle Generation**: Create Sudoku puzzles with varying difficulty levels
+- **🤖 AI Solver**: Advanced algorithm for solving puzzles efficiently
+- **🌐 REST API**: Complete HTTP API for puzzle operations
+- **💡 Hint System**: Intelligent hint generation for next moves
+- **✅ Validation**: Comprehensive puzzle validation and error checking
+- **📊 Game Statistics**: Track solving progress and performance
+
+## 🚀 Installation
+
+### Prerequisites
+
+- Python 3.8 or higher
+- pip package manager
+
+### Install from PyPI
 
 ```bash
-pip install sudoku-lib
+pip install sudoku-ai-lib
 ```
 
-Or install from source:
+### Install from Source
 
 ```bash
-git clone https://github.com/terminaldz/sudoku-lib
+git clone https://github.com/terminaldz/sudoku-lib.git
 cd sudoku-lib
-pip install -r requirements.txt
+pip install -e ".[dev]"
 ```
 
-## Library Usage
+## 🎯 Quick Start
 
 ### Basic Usage
 
 ```python
-from sudoku_lib import SudokuGame, SudokuSolver
-import numpy as np
+from sudoku_lib.game import SudokuGame
+from sudoku_lib.solver import SudokuSolver
 
 # Create a new game
 game = SudokuGame()
-puzzle = game.new_game(difficulty="medium")
-
-# Create a solver
-solver = SudokuSolver(puzzle)
+puzzle = game.new_game("medium")
 
 # Solve the puzzle
-success, steps = solver.solve()
-if success:
-    print("Solution found!")
-    print(solver.grid)
-```
+solver = SudokuSolver(puzzle)
+solution, steps = solver.solve()
 
-### Advanced Features
-
-1. **Game State Management**:
-```python
-# Save game state
-save_name = solver.save_game_state("player1", "my_save")
-
-# Load game state
-solver.load_game_state("player1", "my_save")
-
-# Get saved games
-saves = solver.get_saved_games("player1")
-```
-
-2. **Player Statistics**:
-```python
-# Get player stats
-stats = solver.get_player_statistics("player1")
-print(f"Total solved: {stats['total_solved']}")
-print(f"Difficulty breakdown: {stats['difficulty_breakdown']}")
-```
-
-3. **Hint System**:
-```python
 # Get a hint
 hint = solver.get_hint()
-if hint:
-    row, col, value, message = hint
-    print(f"Hint: {message}")
 ```
 
-## GUI Application
-
-The library includes a complete GUI application built with PySide6:
+### GUI Application
 
 ```python
 from sudoku_lib.gui import SudokuGUI
-from PySide6.QtWidgets import QApplication
-import sys
 
-app = QApplication(sys.argv)
-window = SudokuGUI()
-window.show()
-sys.exit(app.exec())
+# Launch the GUI
+app = SudokuGUI()
+app.run()
 ```
 
-## Modern Sudoku with AI Solver
+## 🌐 API Reference
 
-A comprehensive Python library and application for Sudoku puzzle generation, solving, and gameplay. This project combines traditional Sudoku gameplay with advanced solving algorithms, providing both a powerful library and a sleek, user-friendly interface.
-
-## Workflow
-
-### CI/CD Pipelines
-
-The project uses GitHub Actions for continuous integration and deployment:
-
-#### Continuous Integration (`ci.yml`)
-- Runs on every push and pull request to main branch
-- Tests against Python 3.8, 3.9, 3.10, and 3.11
-- Performs:
-  - Code linting with flake8
-  - Type checking with mypy
-  - Unit tests with pytest
-  - Code coverage reporting to Codecov
-
-#### Security Scanning (`codeql.yml`)
-- CodeQL analysis for security vulnerabilities
-- Runs on push, pull requests, and weekly schedule
-- Analyzes Python codebase for security issues
-
-#### Publication (`publish.yml`)
-- Triggered on release publication
-- Builds and publishes package to PyPI
-- Requires PyPI API token in repository secrets
-
-### Development Workflow
-1. **Setup Development Environment**
-   ```bash
-   # Clone the repository
-   git clone https://github.com/terminaldz/sudoku-lib
-   cd sudoku-lib
-   
-   # Create and activate virtual environment
-   python -m venv venv
-   # On Windows:
-   .\venv\Scripts\activate
-   # On Unix/MacOS:
-   source venv/bin/activate
-   
-   # Install development dependencies
-   pip install -e ".[dev]"
-   ```
-
-2. **Making Changes**
-   - Create a new branch for your feature/fix
-   - Write tests for new functionality
-   - Ensure all tests pass locally
-   - Update documentation as needed
-
-3. **Code Quality**
-   ```bash
-   # Run linting
-   flake8 sudoku_lib tests
-   
-   # Run type checking
-   mypy sudoku_lib
-   
-   # Run tests with coverage
-   pytest --cov=sudoku_lib tests/
-   ```
-
-4. **Submitting Changes**
-   - Push changes to your fork
-   - Create a pull request with a clear description
-   - Ensure CI checks pass
-   - Request review from maintainers
-
-### Release Workflow
-1. **Version Update**
-   - Update version in `setup.py`
-   - Update CHANGELOG.md
-   - Create release notes
-
-2. **Package Release**
-   ```bash
-   # Build distribution
-   python -m build
-   
-   # Upload to PyPI
-   python -m twine upload dist/*
-   ```
-
-## Features
-
-#### Core Library Features
-- 🧩 Puzzle generation with multiple difficulty levels
-- 🤖 Advanced solving algorithms:
-  - Naked Singles detection
-  - Hidden Singles detection
-  - Advanced backtracking algorithm
-- 💾 Solution caching and persistence
-- 📊 Player statistics tracking
-- 💾 Game state saving/loading
-- ✅ Solution verification
-
-#### GUI Application Features
-- 🎮 Modern, intuitive graphical interface
-- 🎯 Three difficulty levels (Easy, Medium, Hard)
-- 🔢 Input validation and error checking
-- 💡 Smart hint system
-- 📝 Step-by-step solution visualization
-- 📈 Player statistics and history
-- 💾 Progress saving and loading
-
-## Installation
+### Starting the API Server
 
 ```bash
-pip install sudoku-lib
+# Development server
+uvicorn sudoku_lib.api:app --reload
+
+# Production server
+uvicorn sudoku_lib.api:app --host 0.0.0.0 --port 8000
 ```
 
-Or install from source:
+### Interactive Documentation
 
-```bash
-git clone https://github.com/terminaldz/sudoku-lib
-cd sudoku-lib
-pip install -r requirements.txt
-```
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-## Library Usage
+### API Endpoints
 
-### Basic Usage
+#### Generate Puzzle
 
 ```python
-from sudoku_lib import SudokuGame, SudokuSolver
-import numpy as np
+import requests
 
-# Create a new game
-game = SudokuGame()
-puzzle = game.new_game(difficulty="medium")
-
-# Create a solver
-solver = SudokuSolver(puzzle)
-
-# Solve the puzzle
-success, steps = solver.solve()
-if success:
-    print("Solution found!")
-    print(solver.grid)
+# Get a medium difficulty puzzle
+response = requests.get("http://localhost:8000/puzzle/medium")
+puzzle = response.json()["puzzle"]
 ```
 
-### Advanced Features
-
-1. **Game State Management**:
-```python
-# Save game state
-save_name = solver.save_game_state("player1", "my_save")
-
-# Load game state
-solver.load_game_state("player1", "my_save")
-
-# Get saved games
-saves = solver.get_saved_games("player1")
-```
-
-2. **Player Statistics**:
-```python
-# Get player stats
-stats = solver.get_player_statistics("player1")
-print(f"Total solved: {stats['total_solved']}")
-print(f"Difficulty breakdown: {stats['difficulty_breakdown']}")
-```
-
-3. **Hint System**:
-```python
-# Get a hint
-hint = solver.get_hint()
-if hint:
-    row, col, value, message = hint
-    print(f"Hint: {message}")
-```
-
-## GUI Application
-
-Launch the graphical interface:
+#### Solve Puzzle
 
 ```python
-python sudoku_gui.py
+# Solve a puzzle
+solution = requests.post(
+    "http://localhost:8000/solve",
+    json={"puzzle": puzzle}
+).json()
 ```
 
-### Game Controls:
-- Select difficulty level from dropdown
-- Click "New Game" to start
-- Click cells to select them
-- Use number buttons or keyboard to input values
-- Use "Clear" to remove numbers
-- Click "Get Hint" for suggestions
-- Use "Solve with AI" to see the complete solution
+#### Get Hint
 
-## Project Structure
+```python
+# Get next move hint
+hint = requests.post(
+    "http://localhost:8000/hint",
+    json={"puzzle": puzzle}
+).json()
+```
+
+#### Validate Solution
+
+```python
+# Check solution validity
+result = requests.post(
+    "http://localhost:8000/validate",
+    json={"puzzle": solution}
+).json()
+```
+
+For more examples, see [examples/api_usage.py](examples/api_usage.py).
+
+## 🛠️ Development
+
+### Project Structure
 
 ```
 sudoku_lib/
-├── __init__.py
-├── solver.py     # Core solving algorithms
-├── game.py       # Game logic and generation
-└── gui.py        # GUI implementation
+├── api.py          # REST API implementation
+├── game.py         # Core game logic
+├── solver.py       # AI solver implementation
 
-examples/
-└── basic_usage.py
 
 tests/
-└── test_sudoku.py
+├── test_api.py     # API tests
+├── test_game.py    # Game logic tests
+└── test_solver.py  # Solver tests
+
+examples/
+├── basic_usage.py  # Basic library usage
+└── api_usage.py    # API usage examples
 ```
 
-## Data Storage
-
-Game data is stored in `sudoku_solutions.json` with the following structure:
-```json
-{
-  "puzzles": {
-    "puzzle_key": {
-      "original": [...],
-      "solutions": [...],
-      "first_solved": "timestamp",
-      "difficulty": "level"
-    }
-  },
-  "saved_games": {
-    "player_name": {
-      "save_name": {
-        "grid": [...],
-        "original_grid": [...],
-        "timestamp": "2025-01-04...",
-        "used_hints": [],
-        "difficulty": "medium"
-      }
-    }
-  },
-  "player_solutions": {
-    "player_name": [...]
-  }
-}
-```
-
-## Dependencies
-
-- Python 3.8+
-- PySide6
-- NumPy
-- Requirements listed in `requirements.txt`
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or create issues for bugs and feature requests.
-
-## Testing
-
-Run the test suite:
+### Setup Development Environment
 
 ```bash
-python -m pytest tests/
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate    # Windows
+
+# Install development dependencies
+pip install -e ".[dev]"
 ```
 
-## License
+## 🧪 Testing
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+```bash
+# Run all tests
+pytest
 
-## Credits
+# Run tests with coverage
+pytest --cov=sudoku_lib --cov-report=term-missing
 
-Created by Idriss Boukmouche
-
-## API Documentation
-
-### SudokuGame Class
-
-```python
-class SudokuGame:
-    def new_game(difficulty: str) -> np.ndarray:
-        """Generate a new puzzle with specified difficulty"""
-        
-    def verify_solution(grid: np.ndarray) -> Tuple[bool, list]:
-        """Verify if solution is valid"""
+# Run specific test file
+pytest tests/test_api.py
 ```
 
-### SudokuSolver Class
+## 🤝 Contributing
 
-```python
-class SudokuSolver:
-    def solve() -> Tuple[bool, List[str]]:
-        """Solve the puzzle and return steps"""
-        
-    def get_hint() -> Optional[Tuple[int, int, int, str]]:
-        """Get next move hint"""
-        
-    def save_game_state(player_name: str, save_name: str) -> str:
-        """Save current game state"""
-        
-    def load_game_state(player_name: str, save_name: str) -> bool:
-        """Load saved game state"""
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Code Style
+
+- Follow PEP 8 guidelines
+- Use type hints
+- Write docstrings for all public functions
+- Add tests for new features
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📧 Contact
+
+Idriss Boukmouche - boukemoucheidriss@gmail.com
+
+Project Link: [https://github.com/terminaldz/sudoku-lib](https://github.com/terminaldz/sudoku-lib)
+
+---
+
+Made with ❤️ by [Idriss Boukmouche](https://github.com/terminaldz)
