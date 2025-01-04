@@ -37,7 +37,7 @@ A comprehensive Python library for Sudoku puzzle generation, solving, and game m
 ### Install from PyPI
 
 ```bash
-pip install sudoku-ai-lib
+pip install sudoku-iba-lib
 ```
 
 ### Install from Source
