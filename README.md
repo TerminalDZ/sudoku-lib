@@ -213,3 +213,4 @@ Project Link: [https://github.com/terminaldz/sudoku-lib](https://github.com/term
 ---
 
 Made with ❤️ by [Idriss Boukmouche](https://github.com/terminaldz)
+
