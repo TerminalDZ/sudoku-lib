@@ -1,0 +1,195 @@
+.sudoku-board {
+  display: inline-block;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: boardAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sudoku-board:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.sudoku-board.disabled {
+  opacity: 0.7;
+  transform: scale(0.98);
+  pointer-events: none;
+}
+
+.board-row {
+  display: flex;
+  animation: rowAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.board-cell {
+  width: 54px;
+  height: 54px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+}
+
+.board-cell:focus {
+  outline: none;
+  background-color: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  z-index: 1;
+}
+
+.board-cell:hover:not(:disabled):not(.original-cell) {
+  background-color: rgba(99, 102, 241, 0.05);
+  transform: translateY(-1px);
+}
+
+.board-cell:disabled {
+  background-color: rgba(0, 0, 0, 0.03);
+  color: rgba(0, 0, 0, 0.4);
+  cursor: not-allowed;
+}
+
+.border-bottom {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.border-right {
+  border-right: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+/* Remove spinner buttons from number input */
+.board-cell::-webkit-inner-spin-button,
+.board-cell::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.board-cell[type=number] {
+  -moz-appearance: textfield;
+}
+
+.hint-cell {
+  background-color: rgba(34, 197, 94, 0.1);
+  animation: hintPulse 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hint-cell::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(34, 197, 94, 0.2), transparent);
+  animation: hintShine 2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.solved-cell {
+  background-color: rgba(99, 102, 241, 0.1);
+  animation: solvedAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.original-cell {
+  background-color: #f8f9fa;
+  font-weight: 700;
+  color: #1a1a1a;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+.original-cell:hover {
+  background-color: #f8f9fa;
+}
+
+.original-cell:focus {
+  background-color: #f8f9fa;
+  outline: none;
+  box-shadow: none;
+}
+
+@keyframes boardAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes rowAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hintPulse {
+  0% {
+    background-color: rgba(34, 197, 94, 0.1);
+  }
+  50% {
+    background-color: rgba(34, 197, 94, 0.2);
+  }
+  100% {
+    background-color: rgba(34, 197, 94, 0.1);
+  }
+}
+
+@keyframes hintShine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+@keyframes solvedAppear {
+  0% {
+    background-color: rgba(99, 102, 241, 0);
+    transform: scale(0.95);
+  }
+  50% {
+    background-color: rgba(99, 102, 241, 0.2);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: rgba(99, 102, 241, 0.1);
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .sudoku-board {
+    padding: 16px;
+  }
+
+  .board-cell {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}

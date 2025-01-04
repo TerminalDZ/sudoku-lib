@@ -6,3 +6,5 @@ sudoku_solutions.json
 .pytest_cache
 sudoku_lib/__pycache__
 .coverage
+web/node_modules
+web/package-lock.json

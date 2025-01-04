@@ -13,6 +13,7 @@ A comprehensive Python library for Sudoku puzzle generation, solving, and game m
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [API Reference](#api-reference)
+- [Web Application](#web-application)
 - [Development](#development)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -139,6 +140,78 @@ result = requests.post(
 
 For more examples, see [examples/api_usage.py](examples/api_usage.py).
 
+## 🌐 Web Application
+
+The project includes a modern web interface built with React, providing a user-friendly way to interact with the Sudoku API.
+
+### Features
+
+- **🎮 Interactive Game Board**: Responsive grid with real-time input validation
+- **🎯 Multiple Difficulty Levels**: Choose between Easy, Medium, and Hard
+- **💡 Hint System**: Get suggestions for your next move
+- **✅ Solution Validation**: Check if your solution is correct
+- **🤖 AI Solver**: Solve any puzzle with our advanced AI algorithm
+- **📱 Responsive Design**: Works on desktop and mobile devices
+
+### Running the Web App
+
+1. **Start the API Server**
+```bash
+# Start the FastAPI server
+uvicorn sudoku_lib.api:app --reload
+```
+
+2. **Install Web Dependencies**
+```bash
+# Navigate to web directory
+cd web
+
+# Install dependencies
+npm install
+```
+
+3. **Start the Web App**
+```bash
+# Start development server
+npm start
+```
+
+The web application will be available at [http://localhost:3000](http://localhost:3000)
+
+### Screenshots
+
+#### Main Game Interface
+![Game Interface](screenshots/game.png)
+- Interactive Sudoku grid
+- Difficulty selector
+- Game controls
+
+#### Features
+- Real-time validation
+- Hint system
+- Professional UI/UX
+- Mobile responsive
+
+### Project Structure
+
+```
+web/
+├── src/
+│   ├── components/     # React components
+│   │   ├── Board.jsx   # Sudoku grid component
+│   │   └── Controls.jsx# Game controls
+│   ├── App.jsx        # Main application
+├── public/           # Static assets
+└── package.json     # Dependencies
+```
+
+### Technologies Used
+
+- **React**: Frontend framework
+- **CSS3**: Styling and animations
+- **FastAPI**: Backend API
+- **Fetch API**: API communication
+
 ## 🛠️ Development
 
 ### Project Structure
@@ -213,4 +286,3 @@ Project Link: [https://github.com/terminaldz/sudoku-lib](https://github.com/term
 ---
 
 Made with ❤️ by [Idriss Boukmouche](https://github.com/terminaldz)
-
