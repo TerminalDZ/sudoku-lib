@@ -139,7 +139,10 @@ The project uses GitHub Actions for continuous integration and deployment:
    
    # Create and activate virtual environment
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   # On Windows:
+   .\venv\Scripts\activate
+   # On Unix/MacOS:
+   source venv/bin/activate
    
    # Install development dependencies
    pip install -e ".[dev]"

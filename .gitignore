@@ -1,0 +1,8 @@
+__pycache__
+.venv
+venv
+sudoku_lib.egg-info
+sudoku_solutions.json
+.pytest_cache
+sudoku_lib/__pycache__
+.coverage

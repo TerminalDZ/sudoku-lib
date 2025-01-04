@@ -32,7 +32,10 @@ class SudokuGame:
             "easy": 30,
             "medium": 40,
             "hard": 50
-        }.get(difficulty.lower(), 40)
+        }.get(difficulty.lower())
+        
+        if cells_to_remove is None:
+            raise ValueError(f"Invalid difficulty level: {difficulty}. Must be one of: easy, medium, hard")
         
         puzzle = solution.copy()
         positions = [(i, j) for i in range(9) for j in range(9)]
