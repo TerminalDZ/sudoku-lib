@@ -181,7 +181,7 @@ The web application will be available at [http://localhost:3000](http://localhos
 ### Screenshots
 
 #### Main Game Interface
-![Game Interface](screenshots/game.png)
+
 - Interactive Sudoku grid
 - Difficulty selector
 - Game controls
